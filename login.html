@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NailScan AI | Login</title>
+  <link rel="stylesheet" href="login.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <div class="bg-blob blob1"></div>
+  <div class="bg-blob blob2"></div>
+  <div class="bg-blob blob3"></div>
+
+  <div class="auth-wrapper">
+
+    <!-- ══ LEFT: BRAND PANEL ══ -->
+    <div class="brand-panel">
+      <div class="brand-inner">
+
+        <div class="dna-wrap">
+          <div class="dna-dot dd1"></div>
+          <div class="dna-dot dd2"></div>
+          <div class="dna-dot dd3"></div>
+          <div class="dna-dot dd4"></div>
+          <div class="dna-dot dd5"></div>
+          <div class="dna-line dl1"></div>
+          <div class="dna-line dl2"></div>
+          <div class="dna-line dl3"></div>
+          <div class="dna-line dl4"></div>
+        </div>
+
+        <div class="brand-name">NailScan AI</div>
+        <div class="brand-tag">Anemia Detection Intelligence System</div>
+        <div class="brand-desc">AI-powered non-invasive detection of iron deficiency anemia through fingernail image analysis using DenseNet-169.</div>
+
+        <div class="brand-stats">
+          <div class="bstat"><div class="bstat-num">94.3%</div><div class="bstat-lbl">Accuracy</div></div>
+          <div class="bstat-sep"></div>
+          <div class="bstat"><div class="bstat-num">DenseNet</div><div class="bstat-lbl">Architecture</div></div>
+          <div class="bstat-sep"></div>
+          <div class="bstat"><div class="bstat-num">Real-Time</div><div class="bstat-lbl">Inference</div></div>
+        </div>
+
+        <div class="brand-uni">
+          <span class="uni-ico">🎓</span>
+          <div>
+            <div class="uni-name">Shaheed Benazir Bhutto University</div>
+            <div class="uni-sub">SBA · BS-IT Final Year Project 2026/27</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ RIGHT: AUTH PANEL ══ -->
+    <div class="auth-panel">
+
+      <!-- LOGIN -->
+      <div class="auth-card active" id="card-login">
+        <div class="card-head">
+          <span class="card-ico">🧬</span>
+          <h1 class="card-title">Welcome Back</h1>
+          <p class="card-sub">Sign in to your NailScan AI account</p>
+        </div>
+
+        <button class="google-btn" onclick="googleAuth()">
+          <svg width="20" height="20" viewBox="0 0 24 24">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Continue with Google
+        </button>
+
+        <div class="or-line"><span>or continue with email</span></div>
+
+        <div class="field">
+          <label class="flbl">Email Address</label>
+          <div class="fwrap"><span class="fico">✉️</span><input class="finput" id="l-email" type="email" placeholder="you@example.com" /></div>
+        </div>
+
+        <div class="field">
+          <div class="flbl-row">
+            <label class="flbl">Password</label>
+            <span class="forgot-lnk" onclick="switchTo('forgot')">Forgot password?</span>
+          </div>
+          <div class="fwrap">
+            <span class="fico">🔒</span>
+            <input class="finput" id="l-pass" type="password" placeholder="Enter your password" />
+            <span class="eye" onclick="toggleEye('l-pass',this)">👁️</span>
+          </div>
+        </div>
+
+        <label class="chk-row">
+          <input type="checkbox" id="l-rem" />
+          <span class="chk-box"></span>
+          <span class="chk-txt">Remember me</span>
+        </label>
+
+        <button class="sbtn" onclick="doLogin()">Sign In →</button>
+
+        <p class="sw-row">Don't have an account? <span class="sw-lnk" onclick="switchTo('signup')">Create account</span></p>
+      </div>
+
+      <!-- SIGNUP -->
+      <div class="auth-card" id="card-signup">
+        <div class="card-head">
+          <span class="card-ico">🧬</span>
+          <h1 class="card-title">Create Account</h1>
+          <p class="card-sub">Join NailScan AI Research Portal</p>
+        </div>
+
+        <button class="google-btn" onclick="googleAuth()">
+          <svg width="20" height="20" viewBox="0 0 24 24">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Sign up with Google
+        </button>
+
+        <div class="or-line"><span>or sign up with email</span></div>
+
+        <div class="two-col">
+          <div class="field">
+            <label class="flbl">First Name</label>
+            <div class="fwrap"><span class="fico">👤</span><input class="finput" id="s-fname" type="text" placeholder="Hassan" /></div>
+          </div>
+          <div class="field">
+            <label class="flbl">Last Name</label>
+            <div class="fwrap"><span class="fico">👤</span><input class="finput" id="s-lname" type="text" placeholder="Ali" /></div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="flbl">Email Address</label>
+          <div class="fwrap"><span class="fico">✉️</span><input class="finput" id="s-email" type="email" placeholder="you@example.com" /></div>
+        </div>
+
+        <div class="field">
+          <label class="flbl">Role</label>
+          <div class="fwrap">
+            <span class="fico">🏥</span>
+            <select class="finput fselect" id="s-role">
+              <option>User</option><option>Administrator</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="flbl">Password</label>
+          <div class="fwrap">
+            <span class="fico">🔒</span>
+            <input class="finput" id="s-pass" type="password" placeholder="Min. 8 characters" oninput="strengthCheck(this.value)" />
+            <span class="eye" onclick="toggleEye('s-pass',this)">👁️</span>
+          </div>
+          <div class="str-bar"><div class="str-fill" id="str-fill"></div></div>
+          <div class="str-txt" id="str-txt"></div>
+        </div>
+
+        <div class="field">
+          <label class="flbl">Confirm Password</label>
+          <div class="fwrap">
+            <span class="fico">🔒</span>
+            <input class="finput" id="s-confirm" type="password" placeholder="Repeat password" />
+            <span class="eye" onclick="toggleEye('s-confirm',this)">👁️</span>
+          </div>
+        </div>
+
+        <label class="chk-row">
+          <input type="checkbox" id="s-terms" />
+          <span class="chk-box"></span>
+          <span class="chk-txt">I agree to the <u>Terms of Use</u> and <u>Privacy Policy</u></span>
+        </label>
+
+        <button class="sbtn" onclick="doSignup()">Create Account →</button>
+
+        <p class="sw-row">Already have an account? <span class="sw-lnk" onclick="switchTo('login')">Sign in</span></p>
+      </div>
+
+      <!-- FORGOT -->
+      <div class="auth-card" id="card-forgot">
+        <div class="card-head">
+          <span class="card-ico">🔑</span>
+          <h1 class="card-title">Reset Password</h1>
+          <p class="card-sub">We'll send a reset link to your email</p>
+        </div>
+
+        <div class="field">
+          <label class="flbl">Email Address</label>
+          <div class="fwrap"><span class="fico">✉️</span><input class="finput" id="f-email" type="email" placeholder="you@example.com" /></div>
+        </div>
+
+        <button class="sbtn" onclick="doForgot()">Send Reset Link →</button>
+        <p class="sw-row"><span class="sw-lnk" onclick="switchTo('login')">← Back to Sign In</span></p>
+      </div>
+
+      <div class="auth-footer">For Academic &amp; Research Use Only · SBBU SBA · 2024/25</div>
+
+    </div>
+  </div>
+
+  <div id="toasts"></div>
+  <script src="login.js"></script>
+</body>
+</html>

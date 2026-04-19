@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NailScan AI | Anemia Detection</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════
+       SPLASH SCREEN
+  ═══════════════════════════════════════════════ -->
+  <div class="splash" id="splash">
+    <div class="splash-content">
+      <div class="splash-dna">
+        <div class="dna-strand">
+          <div class="dna-node n1"></div>
+          <div class="dna-node n2"></div>
+          <div class="dna-node n3"></div>
+          <div class="dna-node n4"></div>
+          <div class="dna-node n5"></div>
+          <div class="dna-bar b1"></div>
+          <div class="dna-bar b2"></div>
+          <div class="dna-bar b3"></div>
+          <div class="dna-bar b4"></div>
+        </div>
+      </div>
+      <div class="splash-logo">NailScan AI</div>
+      <div class="splash-tagline">Anemia Detection Intelligence System</div>
+      <div class="splash-uni">Shaheed Benazir Bhutto University, SBA</div>
+      <div class="splash-loader">
+        <div class="splash-loader-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       TOAST NOTIFICATIONS
+  ═══════════════════════════════════════════════ -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- ═══════════════════════════════════════════════
+       ERROR ALERTS
+  ═══════════════════════════════════════════════ -->
+  <div class="error-container" id="error-container"></div>
+
+  <!-- ═══════════════════════════════════════════════
+       LOADING SPINNER OVERLAY
+  ═══════════════════════════════════════════════ -->
+  <div class="spinner-overlay" id="spinner-overlay">
+    <div class="spinner-content">
+      <div class="spinner-big"></div>
+      <div class="spinner-text" id="spinner-text">Analyzing Image...</div>
+      <div class="spinner-sub" id="spinner-sub">Using DenseNet-169 Vision Model</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       CONFIRMATION DIALOG
+  ═══════════════════════════════════════════════ -->
+  <div class="confirm-overlay" id="confirm-overlay">
+    <div class="confirm-dialog">
+      <div class="confirm-icon" id="confirm-icon">⚠️</div>
+      <div class="confirm-title" id="confirm-title">Confirm Action</div>
+      <div class="confirm-message" id="confirm-message">Are you sure?</div>
+      <div class="confirm-buttons">
+        <button class="confirm-btn cancel" onclick="closeConfirm()">Cancel</button>
+        <button class="confirm-btn confirm" id="confirm-btn" onclick="executeConfirm()">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       PRINT OVERLAY (only prints, hidden on screen)
+  ═══════════════════════════════════════════════ -->
+  <div class="print-area" id="print-area"></div>
+
+  <!-- ═══════════════════════════════════════════════
+       SIDEBAR
+  ═══════════════════════════════════════════════ -->
+  <aside class="sidebar" id="sidebar">
+
+    <!-- Mobile Close Button -->
+    <button class="sidebar-close" onclick="closeSidebarMobile()" aria-label="Close Menu">
+      <span>✕</span>
+    </button>
+
+    <!-- Logo -->
+    <div class="sb-logo">
+      <div class="sb-logo-icon">🧬</div>
+      <div>
+        <div class="sb-logo-name">NailScan AI</div>
+        <div class="sb-logo-sub">Anemia Intelligence</div>
+      </div>
+    </div>
+
+    <div class="sb-divider"></div>
+
+    <!-- User Card -->
+    <div class="sb-user">
+      <div class="sb-avatar" id="sb-avatar">D</div>
+      <div class="sb-user-info">
+        <div class="sb-user-name" id="sb-user-name">Demo User</div>
+        <div class="sb-user-email" id="sb-user-email">demo@nailscan.ai</div>
+        <div class="sb-user-role" id="sb-user-role">✦ Staff Access</div>
+      </div>
+    </div>
+
+    <div class="sb-divider"></div>
+
+    <!-- Navigation -->
+    <nav class="sb-nav">
+      <div class="sb-nav-label">◈ Navigation</div>
+      <button class="sb-nav-btn active" id="nav-diag" onclick="showPage('diagnostic')">
+        <span class="nav-icon">🔬</span> Diagnostic Hub
+        <div class="tooltip-wrapper"><span class="tooltip-icon">?</span><span class="tooltip-text">Upload images & analyze for anemia</span></div>
+      </button>
+      <button class="sb-nav-btn hidden" id="nav-admin" onclick="showPage('admin')">
+        <span class="nav-icon">⚙️</span> Admin Dashboard
+        <div class="tooltip-wrapper"><span class="tooltip-icon">?</span><span class="tooltip-text">View analytics & patient records</span></div>
+      </button>
+    </nav>
+
+    <div class="sb-divider"></div>
+
+    <!-- Model Specs -->
+    <div class="sb-section">
+      <div class="sb-nav-label">◈ Model Specs</div>
+      <div class="sb-spec-list">
+        <div class="sb-spec-row"><span class="spec-k">Architecture</span><span class="spec-v">DenseNet-169</span></div>
+        <div class="sb-spec-row"><span class="spec-k">Parameters</span><span class="spec-v">12.5 M</span></div>
+        <div class="sb-spec-row"><span class="spec-k">Input Shape</span><span class="spec-v">224×224×3</span></div>
+        <div class="sb-spec-row"><span class="spec-k">Output</span><span class="spec-v">Anemic / Normal</span></div>
+        <div class="sb-spec-row"><span class="spec-k">Optimizer</span><span class="spec-v">Hassan Raza</span></div>
+        <div class="sb-spec-row"><span class="spec-k">Framework</span><span class="spec-v">TF / Keras</span></div>
+      </div>
+    </div>
+
+    <div class="sb-divider"></div>
+
+    <!-- Project Info -->
+    <div class="sb-section">
+      <div class="sb-nav-label">◈ Project Info</div>
+      <div class="sb-project-info">
+        <div class="proj-line"><span class="proj-k">Institution</span><span class="proj-v">SBBU, SBA</span></div>
+        <div class="proj-line"><span class="proj-k">Programme</span><span class="proj-v">BS-IT Final Year</span></div>
+        <div class="proj-line"><span class="proj-k">Session</span><span class="proj-v">2024 / 25</span></div>
+      </div>
+    </div>
+
+    <div class="sb-divider"></div>
+
+    <!-- Logout Button -->
+    <button class="sb-nav-btn logout-btn" onclick="confirmLogout()" style="background-color: #ff4444; margin: 15px; width: calc(100% - 30px);">
+      <span class="nav-icon">🚪</span> Logout
+      <div class="tooltip-wrapper"><span class="tooltip-icon">?</span><span class="tooltip-text">Sign out from system</span></div>
+    </button>
+
+    <div class="sb-footer">For Academic &amp; Research Use Only</div>
+  </aside>
+
+  <!-- ═══════════════════════════════════════════════
+       MOBILE SIDEBAR OVERLAY
+  ═══════════════════════════════════════════════ -->
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebarMobile()"></div>
+
+  <!-- ═══════════════════════════════════════════════
+       MAIN CONTENT
+  ═══════════════════════════════════════════════ -->
+  <main class="main-content hidden" id="main-content">
+
+    <!-- Mobile top bar -->
+    <div class="mobile-topbar">
+      <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="mobile-logo">🧬 NailScan AI</div>
+    </div>
+
+    <!-- Breadcrumbs Navigation -->
+    <div class="breadcrumbs" id="breadcrumbs">
+      <div class="breadcrumb-item">
+        <span class="breadcrumb-link" onclick="showPage('diagnostic')">🏠 Home</span>
+      </div>
+      <div class="breadcrumb-separator">/</div>
+      <div class="breadcrumb-item active" id="breadcrumb-current">🔬 Diagnostic Hub</div>
+    </div>
+
+    <!-- ─── PAGE: DIAGNOSTIC HUB ─── -->
+    <section class="page active" id="page-diagnostic">
+
+      <!-- Hero -->
+      <div class="hero">
+        <div class="hero-eyebrow">🧬 &nbsp; AI-Powered Hematological Analysis &nbsp; 🧬</div>
+        <h1 class="hero-title">Anemia Detection <span class="gold">Intelligence System</span></h1>
+        <p class="hero-sub">Deep Learning · DenseNet-169 Vision Model · Iron-Deficiency Detection via Fingernail Pallor</p>
+        <p class="hero-uni">Shaheed Benazir Bhutto University, Shaheed Benazirabad (SBBU SBA)</p>
+      </div>
+
+      <!-- KPI Bar -->
+      <div class="kpi-bar">
+        <div class="kpi-card">
+          <div class="kpi-label">🧠 Architecture</div>
+          <div class="kpi-value">DenseNet-169</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">📐 Input Resolution</div>
+          <div class="kpi-value">224 × 224 px</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">🎯 Validation Accuracy</div>
+          <div class="kpi-value gold">94.3 %</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">⚡ Inference Speed</div>
+          <div class="kpi-value">Real-Time</div>
+        </div>
+      </div>
+
+      <!-- Main Two-Column -->
+      <div class="diag-grid">
+
+        <!-- LEFT: Input Panel -->
+        <div class="panel" id="input-panel">
+          <div class="panel-header">
+            <div class="panel-title-row">
+              <span class="panel-icon">📡</span>
+              <span class="panel-label">Sample Input</span>
+            </div>
+            <p class="panel-sub">Choose input method and provide a fingernail image.</p>
+          </div>
+
+          <!-- Input Method Toggle -->
+          <div class="input-toggle">
+            <button class="toggle-btn active" id="btn-upload" onclick="switchInput('upload')">
+              📤 Upload Image
+              <div class="tooltip-wrapper"><span class="tooltip-icon">?</span><span class="tooltip-text">Select image from device</span></div>
+            </button>
+            <button class="toggle-btn" id="btn-camera" onclick="switchInput('camera')">
+              📸 Take Photo
+              <div class="tooltip-wrapper"><span class="tooltip-icon">?</span><span class="tooltip-text">Capture photo using camera</span></div>
+            </button>
+          </div>
+
+          <!-- Upload Zone -->
+          <div class="upload-zone" id="upload-zone"
+               onclick="document.getElementById('file-input').click()"
+               ondragover="handleDragOver(event)"
+               ondrop="handleDrop(event)">
+            <input type="file" id="file-input" accept="image/*" style="display:none" onchange="handleFileSelect(event)" />
+            <div class="upload-icon">🔬</div>
+            <div class="upload-text">Drag &amp; drop or <span class="upload-link">click to upload</span></div>
+            <div class="upload-hint">JPG, JPEG, PNG supported</div>
+          </div>
+
+          <!-- Camera Zone -->
+          <div class="camera-zone hidden" id="camera-zone">
+            <div class="camera-wrap">
+              <video id="camera-video" autoplay playsinline></video>
+              <div class="camera-overlay">
+                <div class="cam-corner tl"></div>
+                <div class="cam-corner tr"></div>
+                <div class="cam-corner bl"></div>
+                <div class="cam-corner br"></div>
+                <div class="cam-nail-guide">
+                  <div class="nail-shape"></div>
+                  <div class="cam-guide-text">Place fingernail here</div>
+                </div>
+              </div>
+            </div>
+            <button class="capture-btn" id="capture-btn" onclick="capturePhoto()">
+              📸 Capture Photo
+            </button>
+            <canvas id="camera-canvas" style="display:none"></canvas>
+          </div>
+
+          <!-- Image Preview -->
+          <div class="img-preview hidden" id="img-preview">
+            <img id="preview-img" src="" alt="Nail preview" />
+            <div class="img-meta">
+              <div class="meta-item">
+                <div class="meta-label">Width</div>
+                <div class="meta-value" id="img-width">—</div>
+              </div>
+              <div class="meta-item">
+                <div class="meta-label">Height</div>
+                <div class="meta-value" id="img-height">—</div>
+              </div>
+              <div class="meta-item">
+                <div class="meta-label">Mode</div>
+                <div class="meta-value">RGB</div>
+              </div>
+            </div>
+            <div class="validation-status" id="validation-status">
+              <div class="validation-icon">⏳</div>
+              <div class="validation-text">Validating image...</div>
+            </div>
+            <button class="clear-btn" onclick="clearImage()">
+              ✕ Clear Image
+              <div class="tooltip-wrapper"><span class="tooltip-icon">?</span><span class="tooltip-text">Remove current image</span></div>
+            </button>
+          </div>
+
+          <!-- Tips -->
+          <div class="tips-box">
+            <div class="tips-title">📋 Tips for best results</div>
+            <ul class="tips-list">
+              <li>Clean, dry fingernail — no nail polish</li>
+              <li>Good natural light or bright lamp</li>
+              <li>Hold camera steady, 5–8 cm away</li>
+              <li>Left index finger preferred</li>
+            </ul>
+          </div>
+
+          <!-- Analyze Button -->
+          <button class="analyze-btn" id="analyze-btn" onclick="analyzeImage()">
+            <span class="btn-icon">🔬</span> Analyze for Anemia
+          </button>
+        </div>
+
+        <!-- RIGHT: Output Panel -->
+        <div class="panel" id="output-panel">
+          <div class="panel-header">
+            <div class="panel-title-row">
+              <span class="panel-icon">🩻</span>
+              <span class="panel-label">Diagnostic Output</span>
+            </div>
+          </div>
+
+          <!-- Pending State -->
+          <div class="output-pending" id="output-pending">
+            <div class="pending-icon">🫀</div>
+            <div class="pending-title">Diagnostic Pending</div>
+            <div class="pending-sub">Provide an image and press Analyze to begin.</div>
+          </div>
+
+          <!-- Loading State -->
+          <div class="output-loading hidden" id="output-loading">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">🧬 Analyzing Cellular Patterns...</div>
+            <div class="loading-sub">DenseNet-169 processing fingernail morphology</div>
+          </div>
+
+          <!-- Result: Anemic -->
+          <div class="output-result hidden" id="result-anemic">
+            <div class="result-patient-bar" id="result-patient-a"></div>
+            <div class="result-card anemic">
+              <div class="result-icon">⚠️</div>
+              <div class="result-label">ANEMIC</div>
+              <div class="result-sub-text">Iron Deficiency Pattern Detected</div>
+            </div>
+
+            <div class="conf-bars">
+              <div class="conf-row">
+                <div class="conf-info">
+                  <span class="conf-dot red"></span>
+                  <span class="conf-name">Anemic</span>
+                </div>
+                <span class="conf-pct" id="anemic-pct-a">—</span>
+              </div>
+              <div class="conf-track">
+                <div class="conf-fill red" id="anemic-bar-a"></div>
+              </div>
+
+              <div class="conf-row" style="margin-top:10px">
+                <div class="conf-info">
+                  <span class="conf-dot green"></span>
+                  <span class="conf-name">Normal</span>
+                </div>
+                <span class="conf-pct" id="normal-pct-a">—</span>
+              </div>
+              <div class="conf-track">
+                <div class="conf-fill green" id="normal-bar-a"></div>
+              </div>
+            </div>
+
+            <div class="metrics-row">
+              <div class="metric-card">
+                <div class="metric-label">Risk Level</div>
+                <div class="metric-value" id="risk-a">—</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-label">Certainty</div>
+                <div class="metric-value" id="certainty-a">—</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-label">Top Confidence</div>
+                <div class="metric-value" id="topconf-a">—</div>
+              </div>
+            </div>
+
+            <div class="alert-box danger">
+              This AI tool indicates patterns consistent with reduced hemoglobin perfusion in the nail bed. <strong>This is not a clinical diagnosis.</strong> Please consult a healthcare professional for confirmatory blood tests.
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="result-actions">
+              <button class="print-btn" onclick="printResult('anemic')">🖨️ Print Result</button>
+            </div>
+          </div>
+
+          <!-- Result: Normal -->
+          <div class="output-result hidden" id="result-normal">
+            <div class="result-patient-bar" id="result-patient-n"></div>
+            <div class="result-card normal">
+              <div class="result-icon">✅</div>
+              <div class="result-label">NORMAL</div>
+              <div class="result-sub-text">Healthy Perfusion Profile Confirmed</div>
+            </div>
+
+            <div class="conf-bars">
+              <div class="conf-row">
+                <div class="conf-info">
+                  <span class="conf-dot red"></span>
+                  <span class="conf-name">Anemic</span>
+                </div>
+                <span class="conf-pct" id="anemic-pct-n">—</span>
+              </div>
+              <div class="conf-track">
+                <div class="conf-fill red" id="anemic-bar-n"></div>
+              </div>
+
+              <div class="conf-row" style="margin-top:10px">
+                <div class="conf-info">
+                  <span class="conf-dot green"></span>
+                  <span class="conf-name">Normal</span>
+                </div>
+                <span class="conf-pct" id="normal-pct-n">—</span>
+              </div>
+              <div class="conf-track">
+                <div class="conf-fill green" id="normal-bar-n"></div>
+              </div>
+            </div>
+
+            <div class="metrics-row">
+              <div class="metric-card">
+                <div class="metric-label">Risk Level</div>
+                <div class="metric-value green-text" id="risk-n">—</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-label">Certainty</div>
+                <div class="metric-value" id="certainty-n">—</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-label">Top Confidence</div>
+                <div class="metric-value" id="topconf-n">—</div>
+              </div>
+            </div>
+
+            <div class="alert-box success">
+              No obvious pallor patterns detected in the sample. If symptoms persist, seek clinical evaluation for a confirmed diagnosis.
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="result-actions">
+              <button class="print-btn" onclick="printResult('normal')">🖨️ Print Result</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── PAGE: ADMIN DASHBOARD ─── -->
+    <section class="page" id="page-admin">
+
+      <!-- Admin Hero -->
+      <div class="admin-hero">
+        <h2 class="admin-title">⚙️ Admin Dashboard</h2>
+        <p class="admin-sub">Patient Records · Scan Analytics · System Overview | SBBU SBA</p>
+      </div>
+
+      <!-- Admin KPIs -->
+      <div class="admin-kpis" id="admin-kpis">
+        <div class="admin-kpi-card">
+          <div class="akpi-value" id="akpi-total">28</div>
+          <div class="akpi-label">🔬 Total Scans</div>
+        </div>
+        <div class="admin-kpi-card">
+          <div class="akpi-value red-text" id="akpi-anemic">12</div>
+          <div class="akpi-label">⚠️ Anemic Cases</div>
+        </div>
+        <div class="admin-kpi-card">
+          <div class="akpi-value green-text" id="akpi-normal">16</div>
+          <div class="akpi-label">✅ Normal Cases</div>
+        </div>
+        <div class="admin-kpi-card">
+          <div class="akpi-value" id="akpi-rate">42.9%</div>
+          <div class="akpi-label">📊 Detection Rate</div>
+        </div>
+      </div>
+
+      <!-- Chart + Filter Row -->
+      <div class="admin-grid">
+
+        <!-- Bar Chart -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title-row">
+              <span class="panel-icon">📈</span>
+              <span class="panel-label">Scan Result Distribution</span>
+            </div>
+          </div>
+          <div class="chart-wrap">
+            <div class="chart-bars" id="chart-bars">
+              <!-- Bars injected by JS -->
+            </div>
+            <div class="chart-legend">
+              <span class="legend-dot red"></span><span class="legend-lbl">Anemic</span>
+              <span class="legend-dot green" style="margin-left:16px"></span><span class="legend-lbl">Normal</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Donut -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title-row">
+              <span class="panel-icon">🧩</span>
+              <span class="panel-label">Gender Breakdown</span>
+            </div>
+          </div>
+          <div class="donut-wrap">
+            <svg class="donut-svg" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="45" fill="none" stroke="#0a1022" stroke-width="20"/>
+              <circle cx="60" cy="60" r="45" fill="none" stroke="#e8b84b" stroke-width="20"
+                      stroke-dasharray="169 114" stroke-dashoffset="0"
+                      transform="rotate(-90 60 60)" id="donut-female"/>
+              <circle cx="60" cy="60" r="45" fill="none" stroke="#1a6fff" stroke-width="20"
+                      stroke-dasharray="113 170" stroke-dashoffset="-169"
+                      transform="rotate(-90 60 60)" id="donut-male"/>
+              <text x="60" y="55" text-anchor="middle" fill="#e8b84b" font-size="11" font-weight="700">59%</text>
+              <text x="60" y="68" text-anchor="middle" fill="#7a8faa" font-size="8">Female</text>
+            </svg>
+            <div class="donut-legend">
+              <div class="donut-legend-item">
+                <span class="legend-dot" style="background:#e8b84b"></span>
+                <span>Female — 59%</span>
+              </div>
+              <div class="donut-legend-item">
+                <span class="legend-dot" style="background:#1a6fff"></span>
+                <span>Male — 41%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Patient Records Table -->
+      <div class="panel" style="margin-top:20px">
+        <div class="panel-header">
+          <div class="panel-title-row">
+            <span class="panel-icon">📋</span>
+            <span class="panel-label">Patient Scan Records</span>
+          </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="table-filters">
+          <div class="filter-group">
+            <label class="filter-label">Filter by Result</label>
+            <select class="filter-select" id="filter-result" onchange="filterTable()">
+              <option value="All">All</option>
+              <option value="Anemic">Anemic</option>
+              <option value="Normal">Normal</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label class="filter-label">Filter by Risk</label>
+            <select class="filter-select" id="filter-risk" onchange="filterTable()">
+              <option value="All">All</option>
+              <option value="HIGH">HIGH</option>
+              <option value="MODERATE">MODERATE</option>
+              <option value="LOW">LOW</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label class="filter-label">Scanned By</label>
+            <select class="filter-select" id="filter-staff" onchange="filterTable()">
+              <option value="All">All</option>
+              <option value="Dr. Sana">Dr. Sana</option>
+              <option value="Dr. Kamran">Dr. Kamran</option>
+              <option value="Staff User">Staff User</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="data-table" id="data-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Patient ID</th>
+                <th>Name</th>
+                <th>Result</th>
+                <th>Confidence</th>
+                <th>Risk Level</th>
+                <th>Scanned By</th>
+              </tr>
+            </thead>
+            <tbody id="table-body">
+              <!-- Rows injected by JS -->
+            </tbody>
+          </table>
+        </div>
+        <div class="table-footer" id="table-footer">Showing 0 of 0 records</div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Sidebar overlay for mobile -->
+  <div class="sidebar-overlay hidden" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+  <!-- ═══════════════════════════════════════════════
+       PATIENT INFO MODAL
+  ═══════════════════════════════════════════════ -->
+  <div class="modal-overlay hidden" id="patient-modal">
+    <div class="modal-box">
+
+      <div class="modal-header">
+        <div class="modal-icon">🧬</div>
+        <div>
+          <div class="modal-title">Patient Information</div>
+          <div class="modal-sub">Please fill details before analysis</div>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-field">
+          <label class="modal-label">Full Name <span class="req">*</span></label>
+          <input class="modal-input" id="modal-name" type="text" placeholder="Enter patient full name" />
+        </div>
+
+        <div class="modal-row">
+          <div class="modal-field">
+            <label class="modal-label">Age</label>
+            <input class="modal-input" id="modal-age" type="number" placeholder="e.g. 22" min="1" max="120" />
+          </div>
+          <div class="modal-field">
+            <label class="modal-label">Gender</label>
+            <select class="modal-input modal-select" id="modal-gender">
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="modal-id-preview">
+          <span class="modal-id-label">Auto Patient ID:</span>
+          <span class="modal-id-value" id="modal-id-preview">Will be assigned automatically</span>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="modal-btn-cancel" onclick="closePatientModal()">Cancel</button>
+        <button class="modal-btn-confirm" onclick="confirmPatient()">
+          <span>🔬</span> Confirm &amp; Analyze
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
