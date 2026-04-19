@@ -209,36 +209,12 @@ function capturePhoto() {
   // Create image element for validation
   const img = new Image();
   img.onload = () => {
-    // Validate the captured image
-    showSpinner('Validating Image...', 'Checking if it\'s a fingernail image');
-    showValidationStatus('validating', 'Analyzing image...', '⏳');
-    validateFingernailImage(img)
-      .then(validation => {
-        hideSpinner();
-        showPreview(dataUrl, canvas.width, canvas.height);
-        stopCamera();
-        document.getElementById('camera-zone').classList.add('hidden');
-        if (validation.confidence >= 80) {
-          showValidationStatus('valid', `Valid fingernail (${validation.confidence}% confidence)`, '✅');
-          showToast('✅ Valid fingernail image captured!', 'success');
-        } else {
-          showValidationStatus('warning', `Possible fingernail (${validation.confidence}% confidence)`, '⚠️');
-          showToast(`⚠️ ${validation.reason} (${validation.confidence}% confidence)`, 'warning', 4000);
-        }
-      })
-      .catch(error => {
-        hideSpinner();
-        hideValidationStatus();
-        capturedImage = null; // Clear invalid image
-        showError('Invalid Image', error.reason);
-        if (error.suggestions && error.suggestions.length > 0) {
-          setTimeout(() => {
-            showError('Suggestions', error.suggestions.join('<br>• '));
-          }, 2000);
-        }
-        // Keep camera open for retake
-        showToast('Please try capturing again', 'info');
-      });
+    showSpinner('Processing Image...', 'Preparing preview');
+    hideSpinner();
+    showPreview(dataUrl, canvas.width, canvas.height);
+    stopCamera();
+    document.getElementById('camera-zone').classList.add('hidden');
+    showToast('Photo captured successfully!', 'success');
   };
   img.src = dataUrl;
 }
@@ -249,42 +225,12 @@ function capturePhoto() {
 function handleFileSelect(event) {
   const file = event.target.files[0];
   if (!file) return;
-  if (!file.type.startsWith('image/')) { 
-    showError('Invalid File Type', 'Please select a valid image file (JPG, PNG, etc.)');
-    return; 
-  }
+  if (!file.type.startsWith('image/')) { showToast('Please select a valid image file.', 'error'); return; }
   const reader = new FileReader();
   reader.onload = e => {
     capturedImage = e.target.result;
     const img = new Image();
-    img.onload = () => {
-      // Validate the image before showing preview
-      showSpinner('Validating Image...', 'Checking if it\'s a fingernail image');
-      showValidationStatus('validating', 'Analyzing image...', '⏳');
-      validateFingernailImage(img)
-        .then(validation => {
-          hideSpinner();
-          showPreview(e.target.result, img.naturalWidth, img.naturalHeight);
-          if (validation.confidence >= 80) {
-            showValidationStatus('valid', `Valid fingernail (${validation.confidence}% confidence)`, '✅');
-            showToast('✅ Valid fingernail image detected!', 'success');
-          } else {
-            showValidationStatus('warning', `Possible fingernail (${validation.confidence}% confidence)`, '⚠️');
-            showToast(`⚠️ ${validation.reason} (${validation.confidence}% confidence)`, 'warning', 4000);
-          }
-        })
-        .catch(error => {
-          hideSpinner();
-          hideValidationStatus();
-          clearImage();
-          showError('Invalid Image', error.reason);
-          if (error.suggestions && error.suggestions.length > 0) {
-            setTimeout(() => {
-              showError('Suggestions', error.suggestions.join('<br>• '));
-            }, 2000);
-          }
-        });
-    };
+    img.onload = () => { showPreview(e.target.result, img.naturalWidth, img.naturalHeight); showToast('Image uploaded successfully!', 'success'); };
     img.src = e.target.result;
   };
   reader.readAsDataURL(file);
@@ -306,32 +252,8 @@ function handleDrop(e) {
     capturedImage = ev.target.result;
     const img = new Image();
     img.onload = () => {
-      // Validate the image before showing preview
-      showSpinner('Validating Image...', 'Checking if it\'s a fingernail image');
-      showValidationStatus('validating', 'Analyzing image...', '⏳');
-      validateFingernailImage(img)
-        .then(validation => {
-          hideSpinner();
-          showPreview(ev.target.result, img.naturalWidth, img.naturalHeight);
-          if (validation.confidence >= 80) {
-            showValidationStatus('valid', `Valid fingernail (${validation.confidence}% confidence)`, '✅');
-            showToast('✅ Valid fingernail image detected!', 'success');
-          } else {
-            showValidationStatus('warning', `Possible fingernail (${validation.confidence}% confidence)`, '⚠️');
-            showToast(`⚠️ ${validation.reason} (${validation.confidence}% confidence)`, 'warning', 4000);
-          }
-        })
-        .catch(error => {
-          hideSpinner();
-          hideValidationStatus();
-          clearImage();
-          showError('Invalid Image', error.reason);
-          if (error.suggestions && error.suggestions.length > 0) {
-            setTimeout(() => {
-              showError('Suggestions', error.suggestions.join('<br>• '));
-            }, 2000);
-          }
-        });
+      showPreview(ev.target.result, img.naturalWidth, img.naturalHeight);
+      showToast('Image uploaded successfully!', 'success');
     };
     img.src = ev.target.result;
   };
@@ -346,175 +268,12 @@ function showPreview(src, w, h) {
   resetOutput();
 }
 
-function showValidationStatus(type, message, icon = '') {
-  const statusEl = document.getElementById('validation-status');
-  const iconEl = statusEl.querySelector('.validation-icon');
-  const textEl = statusEl.querySelector('.validation-text');
-
-  statusEl.className = `validation-status ${type}`;
-  iconEl.textContent = icon;
-  textEl.textContent = message;
-  statusEl.style.display = 'flex';
-}
-
-function hideValidationStatus() {
-  const statusEl = document.getElementById('validation-status');
-  statusEl.style.display = 'none';
-}
-
-/* ══════════════════════════════════════════════════
-   IMAGE VALIDATION (Fingernail Detection)
-══════════════════════════════════════════════════ */
-function validateFingernailImage(imageElement) {
-  return new Promise((resolve, reject) => {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = imageElement.naturalWidth;
-    canvas.height = imageElement.naturalHeight;
-
-    ctx.drawImage(imageElement, 0, 0);
-
-    try {
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const data = imageData.data;
-
-      // Basic validation checks
-      const validation = analyzeImageForFingernail(data, canvas.width, canvas.height);
-
-      if (validation.isValid) {
-        resolve(validation);
-      } else {
-        reject({
-          reason: validation.reason,
-          confidence: validation.confidence,
-          suggestions: validation.suggestions
-        });
-      }
-    } catch (error) {
-      reject({
-        reason: 'Image processing failed',
-        confidence: 0,
-        suggestions: ['Try uploading a different image', 'Ensure image is not corrupted']
-      });
-    }
-  });
-}
-
-function analyzeImageForFingernail(data, width, height) {
-  // Calculate basic image properties
-  const totalPixels = width * height;
-  let skinPixels = 0;
-  let nailPixels = 0;
-  let backgroundPixels = 0;
-
-  // Color analysis
-  const colorStats = {
-    red: 0, green: 0, blue: 0,
-    skinTone: 0, nailColor: 0, background: 0
-  };
-
-  // Sample pixels (every 4th pixel for performance)
-  for (let i = 0; i < data.length; i += 16) { // Sample every 4th pixel
-    const r = data[i];
-    const g = data[i + 1];
-    const b = data[i + 2];
-    const brightness = (r + g + b) / 3;
-
-    // Skin tone detection (warm colors)
-    if (r > 150 && g > 100 && b < 150 && Math.abs(r - g) < 50) {
-      skinPixels++;
-      colorStats.skinTone++;
-    }
-
-    // Nail color detection (pale pink/white)
-    if (brightness > 180 && r > 200 && g > 190 && b > 180) {
-      nailPixels++;
-      colorStats.nailColor++;
-    }
-
-    // Background detection (very light or very dark)
-    if (brightness < 50 || brightness > 240) {
-      backgroundPixels++;
-      colorStats.background++;
-    }
-
-    colorStats.red += r;
-    colorStats.green += g;
-    colorStats.blue += b;
-  }
-
-  // Calculate percentages
-  const skinPercentage = (skinPixels / (totalPixels / 4)) * 100;
-  const nailPercentage = (nailPixels / (totalPixels / 4)) * 100;
-  const backgroundPercentage = (backgroundPixels / (totalPixels / 4)) * 100;
-
-  // Aspect ratio check (fingernails are typically oval/rectangular)
-  const aspectRatio = width / height;
-  const isGoodAspectRatio = aspectRatio > 0.5 && aspectRatio < 3.0;
-
-  // Size check (reasonable image size)
-  const isGoodSize = width > 100 && height > 100 && width < 4000 && height < 4000;
-
-  // Validation logic
-  let isValid = false;
-  let confidence = 0;
-  let reason = '';
-  let suggestions = [];
-
-  // High confidence: Good skin + nail colors + aspect ratio
-  if (skinPercentage > 20 && nailPercentage > 5 && isGoodAspectRatio && isGoodSize) {
-    isValid = true;
-    confidence = Math.min(95, (skinPercentage + nailPercentage) / 2);
-    reason = 'Valid fingernail image detected';
-  }
-  // Medium confidence: Some skin/nail colors but needs confirmation
-  else if ((skinPercentage > 10 || nailPercentage > 3) && isGoodAspectRatio) {
-    isValid = true; // Allow but with lower confidence
-    confidence = Math.min(70, (skinPercentage + nailPercentage) / 2);
-    reason = 'Possible fingernail image - please confirm';
-  }
-  // Low confidence: Doesn't look like a fingernail
-  else {
-    isValid = false;
-    confidence = Math.max(5, (skinPercentage + nailPercentage) / 4);
-    reason = 'Image does not appear to be a fingernail';
-
-    if (!isGoodSize) {
-      suggestions.push('Image size should be between 100x100 and 4000x4000 pixels');
-    }
-    if (!isGoodAspectRatio) {
-      suggestions.push('Fingernail images are typically oval or rectangular shaped');
-    }
-    if (skinPercentage < 5 && nailPercentage < 2) {
-      suggestions.push('Look for images with skin tones (pinkish colors) and pale nail areas');
-    }
-    if (backgroundPixels > 70) {
-      suggestions.push('Avoid images with too much white/empty space');
-    }
-  }
-
-  return {
-    isValid,
-    confidence: Math.round(confidence),
-    reason,
-    suggestions,
-    stats: {
-      skinPercentage: Math.round(skinPercentage),
-      nailPercentage: Math.round(nailPercentage),
-      backgroundPercentage: Math.round(backgroundPercentage),
-      aspectRatio: aspectRatio.toFixed(2),
-      dimensions: `${width}x${height}`
-    }
-  };
-}
-
 function clearImage() {
   capturedImage = null;
   document.getElementById('upload-zone').classList.remove('hidden');
   document.getElementById('img-preview').classList.add('hidden');
   document.getElementById('preview-img').src = '';
   document.getElementById('file-input').value = '';
-  hideValidationStatus();
   resetOutput();
 }
 
