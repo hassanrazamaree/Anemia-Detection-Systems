@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI-Based Anemia Detection System | Login</title>
+  <link rel="stylesheet" href="login.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ═══════════════════════════════════════════
+       ANEMIA EDUCATION SECTION STYLES
+    ═══════════════════════════════════════════ */
+
+    .auth-panel {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 30px;
+      align-items: flex-start;
+      padding: 40px 24px;
+      overflow-y: auto;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    .auth-form-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .anemia-info-section {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      animation: fadeInUp 0.6s ease-out;
+      position: sticky;
+      top: -10px;
+      height: fit-content;
+      background: linear-gradient(160deg, rgba(8,14,30,0.9) 0%, rgba(6,9,18,0.95) 100%);
+      border: 1px solid rgba(0, 82, 204, 0.2);
+      border-radius: 12px;
+    }
+
+    .anemia-card {
+      background: rgba(26,111,255,0.08);
+      border: 1px solid rgba(26,111,255,0.15);
+      border-radius: 10px;
+      padding: 12px 14px;
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .anemia-card:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+
+    .anemia-card:nth-child(3) {
+      animation-delay: 0.2s;
+    }
+
+    .anemia-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .anemia-header h3 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #eef2ff;
+      margin: 0;
+    }
+
+    .anemia-header-icon {
+      font-size: 18px;
+      animation: heartbeat 1.5s ease-in-out infinite;
+    }
+
+    .anemia-desc {
+      font-size: 11px;
+      color: #7a8faa;
+      line-height: 1.4;
+      margin: 0;
+    }
+
+    .symptoms-list {
+      list-style: none;
+      margin: 10px 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .symptoms-list li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: #7a8faa;
+    }
+
+    .symptom-icon {
+      font-size: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      transition: transform 0.3s ease, filter 0.3s ease;
+    }
+
+    .symptoms-list li:hover .symptom-icon {
+      transform: scale(1.2) rotate(5deg);
+      filter: brightness(1.2);
+    }
+
+    .impacts-box {
+      background: rgba(0, 82, 204, 0.1);
+      border-left: 3px solid rgba(0, 82, 204, 0.4);
+      padding: 10px;
+      border-radius: 6px;
+    }
+
+    .impacts-box p {
+      margin: 0;
+      font-size: 10px;
+      color: #7a8faa;
+      line-height: 1.3;
+    }
+
+    .blood-cell-animation {
+      width: 50px;
+      height: 50px;
+      margin: 0 auto 8px;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes heartbeat {
+      0%, 100% {
+        transform: scale(1);
+      }
+      25% {
+        transform: scale(1.1);
+      }
+      50% {
+        transform: scale(1);
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1400px) {
+      .auth-panel {
+        grid-template-columns: 1fr 280px;
+        gap: 24px;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .auth-panel {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .anemia-info-section {
+        order: -1;
+        position: static;
+        padding: 20px 0;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+      }
+
+      .blood-cell-animation {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .auth-panel {
+        padding: 20px 12px 40px;
+        min-height: auto;
+      }
+
+      .anemia-info-section {
+        grid-template-columns: 1fr;
+        padding: 16px 0;
+      }
+
+      .anemia-card {
+        padding: 12px;
+      }
+
+      .anemia-header h3 {
+        font-size: 13px;
+      }
+
+      .anemia-desc {
+        font-size: 11px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-blob blob1"></div>
+  <div class="bg-blob blob2"></div>
+  <div class="bg-blob blob3"></div>
+
+  <div class="auth-wrapper">
+
+    <!-- ══ LEFT: BRAND PANEL ══ -->
+    <div class="brand-panel">
+      <div class="brand-inner">
+
+        <div class="dna-wrap">
+          <div class="dna-dot dd1"></div>
+          <div class="dna-dot dd2"></div>
+          <div class="dna-dot dd3"></div>
+          <div class="dna-dot dd4"></div>
+          <div class="dna-dot dd5"></div>
+          <div class="dna-line dl1"></div>
+          <div class="dna-line dl2"></div>
+          <div class="dna-line dl3"></div>
+          <div class="dna-line dl4"></div>
+        </div>
+
+        <div class="brand-name">AI-Based Anemia Detection</div>
+        <div class="brand-tag">System for Anemia Screening</div>
+        <div class="brand-desc">AI-powered non-invasive detection of iron deficiency anemia through fingernail image analysis using DenseNet-169.</div>
+
+        <div class="brand-stats">
+          <div class="bstat"><div class="bstat-num">87.5%</div><div class="bstat-lbl">Accuracy</div></div>
+          <div class="bstat-sep"></div>
+          <div class="bstat"><div class="bstat-num">DenseNet</div><div class="bstat-lbl">Architecture</div></div>
+          <div class="bstat-sep"></div>
+          <div class="bstat"><div class="bstat-num">Real-Time</div><div class="bstat-lbl">Inference</div></div>
+        </div>
+
+        <div class="brand-uni">
+          <span class="uni-ico">🎓</span>
+          <div>
+            <div class="uni-name">Shaheed Benazir Bhutto University</div>
+            <div class="uni-sub">SBA · BS-IT Final Year Project 2026/27</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ RIGHT: AUTH PANEL ══ -->
+    <div class="auth-panel">
+
+      <!-- AUTH FORMS WRAPPER -->
+      <div class="auth-form-wrapper">
+
+      <!-- LOGIN -->
+      <div class="auth-card active" id="card-login">
+        <div class="card-head">
+          <span class="card-ico">🧬</span>
+          <h1 class="card-title">Welcome Back</h1>
+          <p class="card-sub">Sign in to AI-Based Anemia Detection System</p>
+        </div>
+
+        <button class="google-btn" onclick="googleAuth()">
+          <svg width="20" height="20" viewBox="0 0 24 24">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Continue with Google
+        </button>
+
+        <div class="or-line"><span>or continue with email</span></div>
+
+        <div class="field">
+          <label class="flbl">Email Address</label>
+          <div class="fwrap"><span class="fico">✉️</span><input class="finput" id="l-email" type="email" placeholder="you@example.com" /></div>
+        </div>
+
+        <div class="field">
+          <div class="flbl-row">
+            <label class="flbl">Password</label>
+            <span class="forgot-lnk" onclick="switchTo('forgot')">Forgot password?</span>
+          </div>
+          <div class="fwrap">
+            <span class="fico">🔒</span>
+            <input class="finput" id="l-pass" type="password" placeholder="Enter your password" />
+            <span class="eye" onclick="toggleEye('l-pass',this)">👁️</span>
+          </div>
+        </div>
+
+        <label class="chk-row">
+          <input type="checkbox" id="l-rem" />
+          <span class="chk-box"></span>
+          <span class="chk-txt">Remember me</span>
+        </label>
+
+        <button class="sbtn" onclick="doLogin()">Sign In →</button>
+
+        <p class="sw-row">Don't have an account? <span class="sw-lnk" onclick="switchTo('signup')">Create account</span></p>
+      </div>
+
+      <!-- SIGNUP -->
+      <div class="auth-card" id="card-signup">
+        <div class="card-head">
+          <span class="card-ico">🧬</span>
+          <h1 class="card-title">Create Account</h1>
+          <p class="card-sub">Join AI-Based Anemia Detection Research Portal</p>
+        </div>
+
+        <button class="google-btn" onclick="googleAuth()">
+          <svg width="20" height="20" viewBox="0 0 24 24">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Sign up with Google
+        </button>
+
+        <div class="or-line"><span>or sign up with email</span></div>
+
+        <div class="two-col">
+          <div class="field">
+            <label class="flbl">First Name</label>
+            <div class="fwrap"><span class="fico">👤</span><input class="finput" id="s-fname" type="text" placeholder="Hassan" /></div>
+          </div>
+          <div class="field">
+            <label class="flbl">Last Name</label>
+            <div class="fwrap"><span class="fico">👤</span><input class="finput" id="s-lname" type="text" placeholder="Ali" /></div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="flbl">Email Address</label>
+          <div class="fwrap"><span class="fico">✉️</span><input class="finput" id="s-email" type="email" placeholder="you@example.com" /></div>
+        </div>
+
+        <div class="field">
+          <label class="flbl">Role</label>
+          <div class="fwrap">
+            <span class="fico">🏥</span>
+            <select class="finput fselect" id="s-role">
+              <option>User</option><option>Administrator</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="flbl">Password</label>
+          <div class="fwrap">
+            <span class="fico">🔒</span>
+            <input class="finput" id="s-pass" type="password" placeholder="Min. 8 characters" oninput="strengthCheck(this.value)" />
+            <span class="eye" onclick="toggleEye('s-pass',this)">👁️</span>
+          </div>
+          <div class="str-bar"><div class="str-fill" id="str-fill"></div></div>
+          <div class="str-txt" id="str-txt"></div>
+        </div>
+
+        <div class="field">
+          <label class="flbl">Confirm Password</label>
+          <div class="fwrap">
+            <span class="fico">🔒</span>
+            <input class="finput" id="s-confirm" type="password" placeholder="Repeat password" />
+            <span class="eye" onclick="toggleEye('s-confirm',this)">👁️</span>
+          </div>
+        </div>
+
+        <label class="chk-row">
+          <input type="checkbox" id="s-terms" />
+          <span class="chk-box"></span>
+          <span class="chk-txt">I agree to the <u>Terms of Use</u> and <u>Privacy Policy</u></span>
+        </label>
+
+        <button class="sbtn" onclick="doSignup()">Create Account →</button>
+
+        <p class="sw-row">Already have an account? <span class="sw-lnk" onclick="switchTo('login')">Sign in</span></p>
+      </div>
+
+      <!-- FORGOT -->
+      <div class="auth-card" id="card-forgot">
+        <div class="card-head">
+          <span class="card-ico">🔑</span>
+          <h1 class="card-title">Reset Password</h1>
+          <p class="card-sub">We'll send a reset link to your email</p>
+        </div>
+
+        <div class="field">
+          <label class="flbl">Email Address</label>
+          <div class="fwrap"><span class="fico">✉️</span><input class="finput" id="f-email" type="email" placeholder="you@example.com" /></div>
+        </div>
+
+        <button class="sbtn" onclick="doForgot()">Send Reset Link →</button>
+        <p class="sw-row"><span class="sw-lnk" onclick="switchTo('login')">← Back to Sign In</span></p>
+      </div>
+
+      </div><!-- END: auth-form-wrapper -->
+
+      <!-- ANEMIA INFO SECTION -->
+      <div class="anemia-info-section">
+
+        <!-- Intro to Anemia -->
+        <div class="anemia-card">
+          <div class="anemia-header">
+            <span class="anemia-header-icon">❤️</span>
+            <h3>Intro to Anemia</h3>
+          </div>
+          <p class="anemia-desc">
+            Anemia is a condition where your body lacks enough healthy red blood cells to carry oxygen to tissues. Iron deficiency anemia is the most common type worldwide, affecting energy levels and overall health.
+          </p>
+        </div>
+
+        <!-- Symptoms -->
+        <div class="anemia-card">
+          <div class="anemia-header">
+            <span class="anemia-header-icon">⚠️</span>
+            <h3>Common Symptoms</h3>
+          </div>
+          <ul class="symptoms-list">
+            <li><span class="symptom-icon">😴</span> Persistent Fatigue</li>
+            <li><span class="symptom-icon">🤍</span> Pale or Yellowish Skin</li>
+            <li><span class="symptom-icon">🌀</span> Dizziness & Headaches</li>
+            <li><span class="symptom-icon">💅</span> Brittle Nails</li>
+          </ul>
+        </div>
+
+        <!-- Impact Section -->
+        <div class="anemia-card">
+          <div class="anemia-header">
+            <span class="anemia-header-icon">🧠</span>
+            <h3>Impact on Health</h3>
+          </div>
+          <div class="impacts-box">
+            <p>
+              <strong>Energy:</strong> Reduced oxygen transport decreases energy levels.<br/>
+              <strong>Focus:</strong> Cognitive function and concentration may suffer.<br/>
+              <strong>Early Detection:</strong> AI-powered screening helps identify anemia early for timely intervention.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="auth-footer">For Academic &amp; Research Use Only · SBBU SBA · 2024/25</div>
+
+    </div>
+  </div>
+
+  <div id="toasts"></div>
+  <script src="login.js"></script>
+</body>
+</html>
