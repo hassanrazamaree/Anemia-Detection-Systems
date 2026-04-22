@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════
-   NAILSCAN AI — login.js
+   AI-BASED ANEMIA DETECTION SYSTEM — login.js
    Login · Signup · Google Auth · Validation · Toast
 ═══════════════════════════════════════════════════════════ */
 
@@ -76,23 +76,23 @@ function strengthCheck(val) {
 
   if (score <= 1) {
     fill.style.width      = '25%';
-    fill.style.background = '#ff4060';
-    txt.style.color       = '#ff6b88';
+    fill.style.background = '#dc2626';
+    txt.style.color       = '#ef4444';
     txt.textContent       = 'Weak';
   } else if (score <= 2) {
     fill.style.width      = '50%';
-    fill.style.background = '#e8b84b';
-    txt.style.color       = '#f5cc6a';
+    fill.style.background = '#f59e0b';
+    txt.style.color       = '#fbbf24';
     txt.textContent       = 'Fair';
   } else if (score <= 3) {
     fill.style.width      = '75%';
-    fill.style.background = '#4d9eff';
-    txt.style.color       = '#4d9eff';
+    fill.style.background = '#3b82f6';
+    txt.style.color       = '#3b82f6';
     txt.textContent       = 'Good';
   } else {
     fill.style.width      = '100%';
-    fill.style.background = '#10d98a';
-    txt.style.color       = '#10d98a';
+    fill.style.background = '#16a34a';
+    txt.style.color       = '#16a34a';
     txt.textContent       = 'Strong ✓';
   }
 }
@@ -234,7 +234,7 @@ function doSignup() {
       avatar:   fname[0].toUpperCase(),
     };
     localStorage.setItem('nailscan_user', JSON.stringify(user));
-    toast('Account created! Welcome to NailScan AI 🎉' + adminMsg, 'success', 2000);
+    toast('Account created! Welcome to AI-Based Anemia Detection System 🎉' + adminMsg, 'success', 2000);
     setTimeout(() => { window.location.href = 'index.html'; }, 2000);
   }, 1200);
 }

@@ -3,9 +3,216 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NailScan AI | Login</title>
+  <title>AI-Based Anemia Detection System | Login</title>
   <link rel="stylesheet" href="login.css" />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ═══════════════════════════════════════════
+       ANEMIA EDUCATION SECTION STYLES
+    ═══════════════════════════════════════════ */
+
+    .auth-panel {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 30px;
+      align-items: flex-start;
+      padding: 40px 24px;
+      overflow-y: auto;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    .auth-form-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .anemia-info-section {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      animation: fadeInUp 0.6s ease-out;
+      position: sticky;
+      top: -10px;
+      height: fit-content;
+      background: linear-gradient(160deg, rgba(8,14,30,0.9) 0%, rgba(6,9,18,0.95) 100%);
+      border: 1px solid rgba(0, 82, 204, 0.2);
+      border-radius: 12px;
+    }
+
+    .anemia-card {
+      background: rgba(26,111,255,0.08);
+      border: 1px solid rgba(26,111,255,0.15);
+      border-radius: 10px;
+      padding: 12px 14px;
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .anemia-card:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+
+    .anemia-card:nth-child(3) {
+      animation-delay: 0.2s;
+    }
+
+    .anemia-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .anemia-header h3 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #eef2ff;
+      margin: 0;
+    }
+
+    .anemia-header-icon {
+      font-size: 18px;
+      animation: heartbeat 1.5s ease-in-out infinite;
+    }
+
+    .anemia-desc {
+      font-size: 11px;
+      color: #7a8faa;
+      line-height: 1.4;
+      margin: 0;
+    }
+
+    .symptoms-list {
+      list-style: none;
+      margin: 10px 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .symptoms-list li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: #7a8faa;
+    }
+
+    .symptom-icon {
+      font-size: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      transition: transform 0.3s ease, filter 0.3s ease;
+    }
+
+    .symptoms-list li:hover .symptom-icon {
+      transform: scale(1.2) rotate(5deg);
+      filter: brightness(1.2);
+    }
+
+    .impacts-box {
+      background: rgba(0, 82, 204, 0.1);
+      border-left: 3px solid rgba(0, 82, 204, 0.4);
+      padding: 10px;
+      border-radius: 6px;
+    }
+
+    .impacts-box p {
+      margin: 0;
+      font-size: 10px;
+      color: #7a8faa;
+      line-height: 1.3;
+    }
+
+    .blood-cell-animation {
+      width: 50px;
+      height: 50px;
+      margin: 0 auto 8px;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes heartbeat {
+      0%, 100% {
+        transform: scale(1);
+      }
+      25% {
+        transform: scale(1.1);
+      }
+      50% {
+        transform: scale(1);
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1400px) {
+      .auth-panel {
+        grid-template-columns: 1fr 280px;
+        gap: 24px;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .auth-panel {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .anemia-info-section {
+        order: -1;
+        position: static;
+        padding: 20px 0;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+      }
+
+      .blood-cell-animation {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .auth-panel {
+        padding: 20px 12px 40px;
+        min-height: auto;
+      }
+
+      .anemia-info-section {
+        grid-template-columns: 1fr;
+        padding: 16px 0;
+      }
+
+      .anemia-card {
+        padding: 12px;
+      }
+
+      .anemia-header h3 {
+        font-size: 13px;
+      }
+
+      .anemia-desc {
+        font-size: 11px;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -31,12 +238,12 @@
           <div class="dna-line dl4"></div>
         </div>
 
-        <div class="brand-name">NailScan AI</div>
-        <div class="brand-tag">Anemia Detection Intelligence System</div>
+        <div class="brand-name">AI-Based Anemia Detection</div>
+        <div class="brand-tag">System for Anemia Screening</div>
         <div class="brand-desc">AI-powered non-invasive detection of iron deficiency anemia through fingernail image analysis using DenseNet-169.</div>
 
         <div class="brand-stats">
-          <div class="bstat"><div class="bstat-num">94.3%</div><div class="bstat-lbl">Accuracy</div></div>
+          <div class="bstat"><div class="bstat-num">87.5%</div><div class="bstat-lbl">Accuracy</div></div>
           <div class="bstat-sep"></div>
           <div class="bstat"><div class="bstat-num">DenseNet</div><div class="bstat-lbl">Architecture</div></div>
           <div class="bstat-sep"></div>
@@ -57,12 +264,15 @@
     <!-- ══ RIGHT: AUTH PANEL ══ -->
     <div class="auth-panel">
 
+      <!-- AUTH FORMS WRAPPER -->
+      <div class="auth-form-wrapper">
+
       <!-- LOGIN -->
       <div class="auth-card active" id="card-login">
         <div class="card-head">
           <span class="card-ico">🧬</span>
           <h1 class="card-title">Welcome Back</h1>
-          <p class="card-sub">Sign in to your NailScan AI account</p>
+          <p class="card-sub">Sign in to AI-Based Anemia Detection System</p>
         </div>
 
         <button class="google-btn" onclick="googleAuth()">
@@ -110,7 +320,7 @@
         <div class="card-head">
           <span class="card-ico">🧬</span>
           <h1 class="card-title">Create Account</h1>
-          <p class="card-sub">Join NailScan AI Research Portal</p>
+          <p class="card-sub">Join AI-Based Anemia Detection Research Portal</p>
         </div>
 
         <button class="google-btn" onclick="googleAuth()">
@@ -197,6 +407,52 @@
 
         <button class="sbtn" onclick="doForgot()">Send Reset Link →</button>
         <p class="sw-row"><span class="sw-lnk" onclick="switchTo('login')">← Back to Sign In</span></p>
+      </div>
+
+      </div><!-- END: auth-form-wrapper -->
+
+      <!-- ANEMIA INFO SECTION -->
+      <div class="anemia-info-section">
+
+        <!-- Intro to Anemia -->
+        <div class="anemia-card">
+          <div class="anemia-header">
+            <span class="anemia-header-icon">❤️</span>
+            <h3>Intro to Anemia</h3>
+          </div>
+          <p class="anemia-desc">
+            Anemia is a condition where your body lacks enough healthy red blood cells to carry oxygen to tissues. Iron deficiency anemia is the most common type worldwide, affecting energy levels and overall health.
+          </p>
+        </div>
+
+        <!-- Symptoms -->
+        <div class="anemia-card">
+          <div class="anemia-header">
+            <span class="anemia-header-icon">⚠️</span>
+            <h3>Common Symptoms</h3>
+          </div>
+          <ul class="symptoms-list">
+            <li><span class="symptom-icon">😴</span> Persistent Fatigue</li>
+            <li><span class="symptom-icon">🤍</span> Pale or Yellowish Skin</li>
+            <li><span class="symptom-icon">🌀</span> Dizziness & Headaches</li>
+            <li><span class="symptom-icon">💅</span> Brittle Nails</li>
+          </ul>
+        </div>
+
+        <!-- Impact Section -->
+        <div class="anemia-card">
+          <div class="anemia-header">
+            <span class="anemia-header-icon">🧠</span>
+            <h3>Impact on Health</h3>
+          </div>
+          <div class="impacts-box">
+            <p>
+              <strong>Energy:</strong> Reduced oxygen transport decreases energy levels.<br/>
+              <strong>Focus:</strong> Cognitive function and concentration may suffer.<br/>
+              <strong>Early Detection:</strong> AI-powered screening helps identify anemia early for timely intervention.
+            </p>
+          </div>
+        </div>
       </div>
 
       <div class="auth-footer">For Academic &amp; Research Use Only · SBBU SBA · 2024/25</div>
